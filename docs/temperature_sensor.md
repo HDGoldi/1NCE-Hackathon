@@ -296,3 +296,70 @@ To test that the file is now executable, navigate to your tempLog directory and 
 ```
 
 Check your database after 10 minutes or so to make sure your Cronjob is working as when the script is run by Crontab the output is not displayed in the terminal window.
+
+## Optional: PHP File to show the values in Browser
+
+For this to work you need to install the following packages. 
+To install Apache and PHP on Ubuntu use the following comands:
+
+```
+sudo apt-get install apache2 php5 libapache2-mod-php5
+```
+
+Now lets make a php script to return our database data. Change directory to 
+```
+/var/www
+```
+and make a new file called temperaturejson.php.
+
+```
+sudo nano temperaturejson.php
+```
+
+Enter the following into that new file:
+
+```
+<?php
+  
+$username="root";
+$password="password";
+$database="temp_database";
+  
+mysql_connect(localhost,$username,$password);
+@mysql_select_db($database) or die( "Unable to select database");
+  
+$query="SELECT * FROM tempLog";
+$result=mysql_query($query);
+  
+$num=mysql_numrows($result);
+  
+mysql_close();
+  
+$tempValues = array();
+  
+$i=0;
+while ($i < $num)
+{
+        $dateAndTemps = array();
+        $datetime = mysql_result($result,$i,"datetime");
+        $temp = mysql_result($result,$i,"temperature");
+  
+        $dateAndTemps["Date"] = $datetime;
+        $dateAndTemps["Temp"] = $temp;
+  
+        $tempValues[$i]=$dateAndTemps;
+        $i++;
+}
+  
+echo json_encode($tempValues);
+  
+?>
+```
+
+Connect to the website with your servers IP Adress for example:
+http://192.168.0.11/temperaturejson.php
+
+If all has worked correctly you will get an output similar to this:
+```
+[{“Date”:”2014-12-28 17:26:20″,”Temp”:”18.90″},{“Date”:”2014-12-28 17:27:05″,”Temp”:”18.90″},{“Date”:”2014-12-28 17:27:52″,”Temp”:”18.90″},{“Date”:”2014-12-28 17:30:39″,”Temp”:”19.00″},{“Date”:”2014-12-28 17:31:02″,”Temp”:”18.90″},{“Date”:”2015-01-04 22:29:24″,”Temp”:”18.60″},{“Date”:”2015-05-14 20:56:07″,”Temp”:”21.80″},{“Date”:”2015-05-17 19:55:05″,”Temp”:”22.90″},{“Date”:”2015-05-17 19:56:17″,”Temp”:”22.90″},{“Date”:”2015-05-17 20:06:18″,”Temp”:”23.00″},{“Date”:”2015-05-17 20:47:03″,”Temp”:”23.20″}]
+```
