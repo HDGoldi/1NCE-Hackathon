@@ -130,4 +130,66 @@ When selecting the DynamoDB Table in AWS it should look similar to the following
 
 ![Get API Endpoint](images/greate-lambda-6.png)
 
-## Integrating incoming Messages into Application - Example here Zulip Chat Tool
+## Integrating incoming Messages into Application
+### Example here Zulip Chat Tool
+
+For demonstration of the possibilities we have to extend the suggested setup we are going to integrate a Chat-Tool called  Zulip. This can be done with any other comaprable tool like Slack or  Microsoft Teams in a similar setup. 
+
+As one of our main goals is to rapidly develop some robust prototypes we are going to use Zapier - An online integration System to connect AWS with Zulip. Zapier has more than 1,000 Apps available which can be easily integrated with each other.
+On the other hand our Zulip Chat also has a native intergration with Zapier, so we dont have to build any thing from scratch. 
+
+FIrst lets follow the Zulip tutorial to setup Zapier:
+https://1nce.chat.compax.at/integrations/doc/zapier (or documenation from your instance)
+
+* Create the stream you'd like to use for Zapier notifications, and subscribe all interested parties to this stream. We recommend the name zapier. You still need to create the stream even if you are using this default recommendation.
+* On your Zulip settings page, create a bot for Zapier. Make sure that you select Incoming webhook as the Bot type: The API key for an incoming webhook bot cannot be used to read messages out of Zulip. Thus, using an incoming webhook bot lowers the security risk of exposing the bot's API key to a third-party service. Fill out the rest of the fields, and click Create bot. Construct the URL for the Zapier bot using the bot's API key and the desired stream name: `https://1nce.chat.compax.at/api/v1/external/zapier?api_key=abcdefgh&stream=zapier
+` Modify the parameters of the URL above, where api_key is the API key of your Zulip bot, and stream is the stream name you want the notifications sent to. If you do not specify a stream, the bot will send notifications via PMs to the creator of the bot. If you'd like this integration to always send to the topic your_topic, just add &topic=your_topic to the end of the URL.
+* Create a Zap and select the service you'd like to receive notifications from as the Trigger (Step 1). Choose Webhooks by Zapier as the app in Action (Step 2). Select POST as the action, and click Save + Continue.
+* Set URL to the URL constructed above. Set Payload Type to JSON. Add the following two fields to Data:
+topic corresponds to the topic of a message
+content corresponds to the content of a message
+Customize the topic and content fields as necessary. Click Continue.
+
+For getting the data actually into Zulip we still need to build the bridge between AWS and Zapier. On Zapier side we are going to use a regular Webhook, so send over a JSON Payload. 
+
+Here is an example setup in Zapier for the integration:
+
+![Zapier Setup](images/sms-to-application-1.png)
+
+As you can see we using a the Zapier integrated Webhooks function for Trigger as well as Action.
+
+Now lets build another AWS Function to trigger the Webhook in Zapier. 
+
+First we need to create another AWS Lambda function which is later one being triggered by the DynamoDB. 
+The function will be using Python and the following code:
+```
+import json
+from botocore.vendored import requests
+
+print('Loading function')
+
+
+def lambda_handler(event, context):
+    print("Received event: " + json.dumps(event, indent=2))
+    for record in event['Records']:
+        print(record['eventID'])
+        print(record['eventName'])
+        print("DynamoDB Record: " + json.dumps(record['dynamodb'], indent=2))
+        requests.post("https://hooks.zapier.com/hooks/catch/3973895/e40ph7/", data = json.dumps(record['dynamodb'], indent=2))
+    return 'Successfully processed {} records.'.format(len(event['Records']))
+```
+The for us important point in that code is the request.post command which is holding the Zapier Webhook: 
+`requests.post("https://hooks.zapier.com/hooks/catch/3973895/xxxxxx/", data = json.dumps(record['dynamodb'], indent=2))`
+
+This needs to be updated so it holds you actuall Zapier webhook insted of /xxxxxx/.
+
+Then you can select the DynamoDB as a Trigger for the Function: 
+![Trigger by DynamoDB](images/sms-to-application-3.png)
+
+The trigger is easily configured by selecting our DynamoDB Table we previously created and saving the function afterwards:
+![Trigger by DynamoDB](images/sms-to-application-4.png)
+
+If everything is configured correctly we should see new SMS which are send from any of our devices to our SMSC adress as a new Message / Notification in Zulip. 
+
+Here is an example how it could look like: 
+![Trigger by DynamoDB](images/sms-to-application-5.png)
