@@ -122,7 +122,7 @@ sudo apt-get install python-mysqldb
 Now open MySQL on the remote server:
 
 ```
-sudo mysql –u –p
+mysql –u root –p
 ```
 
 This logs us in to MySQL as the root user (-u) and it will prompt for a password (-p) on entry.
@@ -151,7 +151,7 @@ CREATE TABLE tempLog(datetime DATETIME NOT NULL, temperature FLOAT(5,2) NOT NULL
 To check that our table is correct we can check by entering the following:
 
 ```sql
-mysql> DESCRIBE tempLog;
+DESCRIBE tempLog;
 ```
 You will get the following output, describing the table’s fields.
 
