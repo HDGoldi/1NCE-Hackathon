@@ -6,7 +6,7 @@ Being able to use the feature we need to setup a small backend which is able to 
 The 1NCE system can forward MO-SMS to a freely configurable IP/URL. The 1NCE system acts as the HTTPS client. Therefore we must provide an HTTPS server under the specified IP/URL, which is able to receive the requests. 
 
 Example Message send from 1NCE:
-```
+```json
 {
   "dcs": "0",
   "dest_address": "882285000016868",
@@ -53,7 +53,7 @@ Aside from this main functionality, its important features are:
 * Easily composable into your other app components by adding triggers to its DynamoDB table
 
 First we need to put together a small Node.js handler for our Lambda function:
-```
+```JavaScript
 const AWS = require('aws-sdk');
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 const uuidv4 = require('uuid/v4');
@@ -162,7 +162,7 @@ Now lets build another AWS Function to trigger the Webhook in Zapier.
 
 First we need to create another AWS Lambda function which is later one being triggered by the DynamoDB. 
 The function will be using Python and the following code:
-```
+```python
 import json
 from botocore.vendored import requests
 
