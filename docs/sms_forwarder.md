@@ -94,4 +94,40 @@ Everything can be found in the folder ../sms-forwarder.
 
 The whole function is based on the following project: https://github.com/simalexan/api-lambda-save-dynamodb
 
+Therefore we are going to use the template as its directly available in AWS already.
+
+First lets log into AWS Console and go to AWS Lambda where we create a new one based on an Application template:
+
+![Create Function in Lambda](images/greate-lambda-1.png)
+
+Search in AWS Serverless Application Repository for the applicaton called "api-lambda-save-dynamodb".
+
+Then enter the name of your application and the name of the DynamoDB Table you want to create. Everything else will be maned by a AWS CloudFormation Stack - Which is not topic of the current workshop. 
+
+![Enter Function details](images/greate-lambda-2.png)
+
+After successfull deployment you should be able to see all the ressources which were created:
+
+![Deployment Done](images/greate-lambda-3.png)
+
+The Stack created a total of 3 resources in AWS:
+* ApiSaver => an AWS API Gateway with one RestAPI Endpoint
+* DynamoDBTable => A new NoSQL DynamoDB Table
+* LambdaSaver => The Lambda function with the above mentioned code
+
+When clicking on the LambdaSaver function and select the incoming API Gateway you find the API Endpoint Link which we need to use for our SMS Forwarder Configuration: 
+
+![Get API Endpoint](images/greate-lambda-4.png)
+
+Copy the API Endpoint and lets configure our SMS Forwarder in the 1NCE Portal. 
+Paste the Endpoint URL and Save the changes - They should be active immediately.
+
+![Get API Endpoint](images/greate-lambda-5.png)
+
+YOu can test then function by sending an SMS from the IoT Gateway or a simple Phone with an 1NCE SIM Card. All Mobile Originating SMS from the SIMs you have in your account will be forwarded to the central Database. 
+
+When selecting the DynamoDB Table in AWS it should look similar to the following screenshot:
+
+![Get API Endpoint](images/greate-lambda-6.png)
+
 ## Integrating incoming Messages into Application - Example here Zulip Chat Tool
