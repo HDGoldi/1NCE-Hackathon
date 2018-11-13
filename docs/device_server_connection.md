@@ -22,7 +22,7 @@ Copy "credentials.txt" also to /etc/openvpn.
 
 Start the OpenVPN Client by running: 
 ```bash
-sudo openvpn --config /etc/openvpn/client.conf
+sudo openvpn --config /etc/openvpn/client.conf --daemon
 ```
 
 You should see output like the following and also the required routes are added to the server automatically: 
