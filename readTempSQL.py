@@ -10,7 +10,7 @@ os.system('modprobe w1-therm')
 temp_sensor = '/sys/bus/w1/devices/28-00000622fd44/w1_slave'
  
 # Variables for MySQL
-db = MySQLdb.connect(host="localhost", user="root",passwd="password", db="temp_database")
+db = MySQLdb.connect(host="10.64.80.65", user="myuser",passwd="mypass123", db="temp_database")
 cur = db.cursor()
  
 def tempRead():
