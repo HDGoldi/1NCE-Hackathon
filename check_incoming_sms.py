@@ -12,14 +12,17 @@ GPIO.setmode(GPIO.BOARD)
 GPIO.setup(8, GPIO.OUT, initial=GPIO.LOW)
 
 count = 0
-if str(get_sms_message) in open('last_sms').read():
+if str(get_sms_message[0]) in open('last_sms').read():
+    print("nothing to do...")
+else:
     while (count < 4):
         GPIO.output(8, GPIO.HIGH)
         sleep(0.1)
         GPIO.output(8, GPIO.LOW)
         sleep(0.1)
         count += 1
-    with open("last_sms", "w") as text_file:
-        text_file.write(str(get_sms_message)
-else:
-    print("nothing to do...")
+    #with open("last_sms", "w") as text_file:
+    #    text_file.write(str(get_sms_message)
+    text_file = open("last_sms", "w")
+    text_file.write(str(get_sms_message[0]))
+    text_file.close()
