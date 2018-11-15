@@ -67,36 +67,30 @@ class Data:
         result += "Accelerometer x: {x}, y: {y}, z: {z}\n".format(**self.accelerometer)
         return result
 
-data = Data(sense)
 
-print(data)
-statement = "INSERT INTO envdata" + data.sql_fields()
-statement += " VALUES" + data.to_sql()
 
-for x in range(3):
-    time.sleep(15)
+for x in range(5):
+    data = Data(sense)
+    print(data)
+    statement = "INSERT INTO envdata" + data.sql_fields()
+    statement += " VALUES" + data.to_sql()
     data = Data(sense)
     statement += ", " + data.to_sql()
     print(data)
     print("")
-
-print(statement)
-print("")
-
-print("Connectinng to server")
-ctx = mysql.connector.connect(user=config['DEFAULT']['username'],
+    print(statement)
+    print("")
+    print("Connectinng to server")
+    ctx = mysql.connector.connect(user=config['DEFAULT']['username'],
                               password=config['DEFAULT']['password'],
                               host =config['DEFAULT']['host'],
                               database=config['DEFAULT']['database'])
-
-cursor = ctx.cursor()
-
-print("Inserting data")
-cursor.execute(statement)
-
-print("Commiting")
-ctx.commit()
-
-print("Closing")
-cursor.close()
-ctx.close();
+    cursor = ctx.cursor()
+    print("Inserting data")
+    cursor.execute(statement)
+    print("Commiting")
+    ctx.commit()
+    print("Closing")
+    cursor.close()
+    ctx.close();
+    time.sleep(60)
