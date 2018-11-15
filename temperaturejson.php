@@ -4,7 +4,7 @@ $username="myuser";
 $password="mypass123";
 $database="sensehat";
  
-mysql_connect(3.121.159.54,$username,$password);
+mysql_connect(localhost,$username,$password);
 @mysql_select_db($database) or die( "Unable to select database");
  
 $query="SELECT * FROM envdata";
