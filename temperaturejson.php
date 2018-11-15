@@ -1,13 +1,13 @@
 <?php
  
-$username="root";
-$password="password";
-$database="temp_database";
+$username="myuser";
+$password="mypass123";
+$database="sensehat";
  
-mysql_connect(localhost,$username,$password);
+mysql_connect(3.121.159.54,$username,$password);
 @mysql_select_db($database) or die( "Unable to select database");
  
-$query="SELECT * FROM tempLog";
+$query="SELECT * FROM envdata";
 $result=mysql_query($query);
  
 $num=mysql_numrows($result);
@@ -20,8 +20,8 @@ $i=0;
 while ($i < $num)
 {
         $dateAndTemps = array();
-        $datetime=mysql_result($result,$i,"datetime");
-        $temp=mysql_result($result,$i,"temperature");
+        $datetime=mysql_result($result,$i,"time");
+        $temp=mysql_result($result,$i,"temperature_from_humidity");
  
         $dateAndTemps["Date"] = $datetime;
         $dateAndTemps["Temp"] = $temp;
