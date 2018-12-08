@@ -16,6 +16,6 @@ while True:
 	
 	if x > 1.5 or y > 1.5 or z > 1.5:
 		sense.show_letter("!", red)
-		print("!")
+		print("Movemet detected!")
 	else:
 		sense.clear()
