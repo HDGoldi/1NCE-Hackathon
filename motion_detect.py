@@ -16,5 +16,6 @@ while True:
 
     if x > 1 or y > 1 or z > 1:
         sense.show_letter("!", red)
+	print("!")
     else:
         sense.clear()
