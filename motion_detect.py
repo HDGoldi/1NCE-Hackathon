@@ -14,7 +14,7 @@ while True:
 	y = abs(y)
 	z = abs(z)
 	
-	if x > 3 or y > 3 or z > 3:
+	if x > 2 or y > 2 or z > 2:
 		sense.show_letter("!", red)
 		print("!")
 	else:
