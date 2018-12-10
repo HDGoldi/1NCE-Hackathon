@@ -3,5 +3,5 @@
 
 cd /
 cd home/pi/1NCE-Hackathon
-sudo python3 motion_detect.py
+python3 motion_detect.py
 cd /
