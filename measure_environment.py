@@ -4,7 +4,7 @@ import datetime
 import mysql.connector
 import socket
 import time
-from sense_emu import SenseHat
+from sense_hat import SenseHat
 
 config = configparser.ConfigParser()
 config['DEFAULT'] = {
