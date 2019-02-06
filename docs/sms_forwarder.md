@@ -108,7 +108,7 @@ Then enter the name of your application and the name of the DynamoDB Table you w
 
 After successfull deployment you should be able to see all the ressources which were created:
 
-![Deployment Done](images/greate-lambda-3.png)
+![Deployment Done](1NCE-Hackathon/docs/images/greate-lambda-3.PNG)
 
 The Stack created a total of 3 resources in AWS:
 * ApiSaver => an AWS API Gateway with one RestAPI Endpoint
